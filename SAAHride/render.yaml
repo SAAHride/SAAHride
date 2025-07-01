@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: saahride
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn SAAHride.wsgi"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: SAAHride.settings
+      - key: PYTHON_VERSION
+        value: 3.11
