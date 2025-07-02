@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('driver/dashboard/', views.driver_dashboard, name='driver_dashboard'),
     path('driver/accept/<int:ride_id>/', views.accept_ride, name='accept_ride'),
-    path('request-ride/', views.request_ride, name='request_ride'),
+    path('request-ride/', views.request_ride_view, name='request_ride'),  # ✅ fixed line
     path('', views.home_view, name='home'),
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
