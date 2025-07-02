@@ -74,14 +74,14 @@ def request_ride_view(request):
             ride.user = request.user
             ride.status = 'Pending'
             ride.save()
-            return render(request, 'account/ride_confirmation.html', {
+            return render(request, 'accounts/ride_confirmation.html', {
                 'pickup': ride.pickup_location,
                 'destination': ride.destination,
                 'ride_type': ride.ride_type,
             })
     else:
         form = RideRequestForm()
-    return render(request, 'account/request_ride.html', {'form': form})
+    return render(request, 'accounts/request_ride.html', {'form': form})
 
 
 # ========== Driver Dashboard ==========
@@ -89,7 +89,7 @@ def request_ride_view(request):
 @login_required
 def driver_dashboard(request):
     pending_rides = RideRequest.objects.filter(status='Pending')
-    return render(request, 'account/driver_dashboard.html', {'pending_rides': pending_rides})
+    return render(request, 'accounts/driver_dashboard.html', {'pending_rides': pending_rides})
 
 
 @login_required
