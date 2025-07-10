@@ -5,8 +5,48 @@
 
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <!-- Auto-filled Pickup Location -->
+    <label for="pickup_location">Your Current Location:</label>
+    <input type="text" id="pickup_location" name="pickup_location" readonly required>
+    <br><br>
+
+    <!-- Remaining fields from the form (destination, ride_type) -->
+    {{ form.destination }}
+    {{ form.ride_type }}
 
     <button type="submit">Book Ride</button>
   </form>
+
+  <script>
+    // Use browser geolocation API
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(setLocation, showError);
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+
+    function setLocation(position) {
+      const lat = position.coords.latitude.toFixed(5);
+      const lon = position.coords.longitude.toFixed(5);
+      document.getElementById("pickup_location").value = Lat: ${lat}, Lon: ${lon};
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          alert("The request to get user location timed out.");
+          break;
+        default:
+          alert("An unknown error occurred.");
+          break;
+      }
+    }
+  </script>
 {% endblock %}
