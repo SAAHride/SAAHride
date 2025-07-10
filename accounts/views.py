@@ -72,6 +72,7 @@ def request_ride_view(request):
         if form.is_valid():
             ride = form.save(commit=False)
             ride.user = request.user
+            ride.pickup_location = request.POST.get('pickup_location')  # Get from hidden input
             ride.status = 'Pending'
             ride.save()
             return render(request, 'accounts/ride_confirmation.html', {

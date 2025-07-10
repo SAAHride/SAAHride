@@ -10,9 +10,13 @@ class DriverRegistrationForm(forms.ModelForm):
 class RideRequestForm(forms.ModelForm):
     class Meta:
         model = RideRequest
-        fields = ['pickup_location', 'destination', 'ride_type']
-
-    def _init_(self, *args, **kwargs):
-        super()._init_(*args, **kwargs)
-        self.fields['pickup_location'].required = False  # let JavaScript fill it
-        
+        fields = ['destination', 'ride_type']  # remove pickup_location
+        widgets = {
+            'destination': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Where are you going?'}),
+            'ride_type': forms.Select(choices=[
+                ('Economy', 'Economy'),
+                ('Standard', 'Standard'),
+                ('VIP', 'VIP'),
+                ('VVIP', 'VVIP')
+            ], attrs={'class': 'form-control'}),
+        }

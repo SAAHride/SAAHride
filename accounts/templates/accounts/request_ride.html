@@ -5,8 +5,40 @@
 
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
 
-    <button type="submit">Book Ride</button>
+    <!-- Auto-filled Pickup Location (hidden from user) -->
+    <input type="hidden" id="id_pickup_location" name="pickup_location">
+
+    {{ form.destination.label_tag }}<br>
+    {{ form.destination }}<br><br>
+
+    {{ form.ride_type.label_tag }}<br>
+    {{ form.ride_type }}<br><br>
+
+    <button type="submit">Request Ride</button>
   </form>
+
+  <script>
+    window.onload = function () {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          // Use OpenCage API for reverse geocoding
+          fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=63ac94ed87e14e45b54be12a6a2153fb`)
+            .then(response => response.json())
+            .then(data => {
+              const address = data.results[0].formatted;
+              document.getElementById("id_pickup_location").value = address;
+            })
+            .catch(error => {
+              console.error("Geocoding failed:", error);
+            });
+        });
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
+    };
+  </script>
 {% endblock %}
