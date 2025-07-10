@@ -101,3 +101,20 @@ def accept_ride(request, ride_id):
         ride.accepted_by = request.user
         ride.save()
     return redirect('driver_dashboard')
+
+@login_required
+def start_ride(request, ride_id):
+    ride = get_object_or_404(RideRequest, id=ride_id, accepted_by=request.user)
+    if ride.status == 'Accepted':
+        ride.status = 'In Progress'
+        ride.save()
+    return redirect('driver_dashboard')
+
+
+@login_required
+def complete_ride(request, ride_id):
+    ride = get_object_or_404(RideRequest, id=ride_id, accepted_by=request.user)
+    if ride.status == 'In Progress':
+        ride.status = 'Completed'
+        ride.save()
+    return redirect('driver_dashboard')

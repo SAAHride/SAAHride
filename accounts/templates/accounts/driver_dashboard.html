@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Driver Dashboard</h2>
+
+  {% if pending_rides %}
+    <ul style="list-style: none; padding: 0;">
+      {% for ride in pending_rides %}
+        <li style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 10px;">
+          <p><strong>Pickup Location:</strong> {{ ride.pickup_location }}</p>
+          <p><strong>Destination:</strong> {{ ride.destination }}</p>
+          <p><strong>Ride Type:</strong> {{ ride.ride_type|default:"Standard" }}</p>
+          <p><strong>Status:</strong> {{ ride.status }}</p>
+
+          {% if ride.status == "Pending" %}
+            <form method="post" action="{% url 'accept_ride' ride.id %}">
+              {% csrf_token %}
+              <button type="submit">Accept Ride</button>
+            </form>
+          {% elif ride.status == "Accepted" and ride.accepted_by == user %}
+            <form method="post" action="{% url 'start_ride' ride.id %}">
+              {% csrf_token %}
+              <button type="submit">Start Ride</button>
+            </form>
+          {% elif ride.status == "In Progress" and ride.accepted_by == user %}
+            <form method="post" action="{% url 'complete_ride' ride.id %}">
+              {% csrf_token %}
+              <button type="submit">Complete Ride</button>
+            </form>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No ride requests available.</p>
+  {% endif %}
+{% endblock %}
