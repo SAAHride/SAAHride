@@ -11,17 +11,8 @@ class RideRequestForm(forms.ModelForm):
     class Meta:
         model = RideRequest
         fields = ['pickup_location', 'destination', 'ride_type']
-        widgets = {
-            'pickup_location': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter pickup location'
-            }),
-            'destination': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter destination'
-            }),
-            'ride_type': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'e.g. Regular, Premium'
-            }),
-        }
+
+    def _init_(self, *args, **kwargs):
+        super()._init_(*args, **kwargs)
+        self.fields['pickup_location'].required = False  # let JavaScript fill it
+        

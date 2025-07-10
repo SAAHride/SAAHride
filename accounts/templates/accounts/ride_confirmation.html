@@ -2,47 +2,14 @@
 
 {% block content %}
   <div style="text-align: center; padding: 40px;">
-    <h2>🚗 Ride Requested!</h2>
-    <p><strong>Pickup:</strong> {{ pickup }}</p>
-    <p><strong>Destination:</strong> {{ destination }}</p>
-    <p><strong>Ride Type:</strong> {{ ride_type|default:"Standard" }}</p>
-    <p>Status: <strong>Pending</strong></p>
-    <br>
-    <a href="{% url 'home' %}">Back to Home</a>
+    <div style="background-color: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+      <h2 style="color: #0072ff;">✅ Ride Request Confirmed</h2>
+      <p><strong>Pickup:</strong> {{ pickup }}</p>
+      <p><strong>Destination:</strong> {{ destination }}</p>
+      <p><strong>Ride Type:</strong> {{ ride_type|default:"Standard" }}</p>
+      <p>Status: <strong>Pending</strong></p>
+      <br>
+      <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+    </div>
   </div>
 {% endblock %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ride Confirmation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
-            background-color: #f7f7f7;
-            text-align: center;
-        }
-        .box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #0072ff;
-        }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h2>✅ Ride Request Confirmed</h2>
-        <p><strong>Pickup:</strong> {{ pickup }}</p>
-        <p><strong>Destination:</strong> {{ destination }}</p>
-        <p><strong>Ride Type:</strong> {{ ride_type }}</p>
-
-        <br>
-        <a href="{% url 'dashboard' %}">Back to Dashboard</a>
-    </div>
-</body>
-</html> 
