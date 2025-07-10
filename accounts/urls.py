@@ -14,4 +14,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('driver/register/', views.driver_register_view, name='driver_register'),
+    path('verify-code/', views.verify_code_view, name='verify_code'),
 ]

@@ -1,6 +1,8 @@
 # accounts/views.py
 from django.core.mail import send_mail
 from .models import Profile
+from django.shortcuts import render
+
 
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -146,6 +148,7 @@ def register_view(request):
 
 
 def verify_code_view(request):
+    return render(request, 'accounts/verify_code.html')  # Make sure this template exists
     if request.method == 'POST':
         code = request.POST.get('code')
         profile = request.user.profile
@@ -154,3 +157,4 @@ def verify_code_view(request):
             profile.save()
             return redirect('dashboard')
     return render(request, 'registration/verify.html')
+    return render(request, 'accounts/verify_code.html')  # Make sure this template exists

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Enter Verification Code</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" name="code" placeholder="Enter verification code">
+    <button type="submit">Verify</button>
+  </form>
+{% endblock %}
