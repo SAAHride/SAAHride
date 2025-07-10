@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['saahride.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts.apps.AccountsConfig',
     'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
