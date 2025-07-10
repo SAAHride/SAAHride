@@ -1,4 +1,7 @@
 # accounts/views.py
+from django.core.mail import send_mail
+from .models import Profile
+
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
@@ -72,14 +75,9 @@ def request_ride_view(request):
         if form.is_valid():
             ride = form.save(commit=False)
             ride.user = request.user
-            ride.pickup_location = request.POST.get('pickup_location')  # Get from hidden input
             ride.status = 'Pending'
             ride.save()
-            return render(request, 'accounts/ride_confirmation.html', {
-                'pickup': ride.pickup_location,
-                'destination': ride.destination,
-                'ride_type': ride.ride_type,
-            })
+            return redirect('ride_status', ride_id=ride.id)
     else:
         form = RideRequestForm()
     return render(request, 'accounts/request_ride.html', {'form': form})
@@ -118,3 +116,41 @@ def complete_ride(request, ride_id):
         ride.status = 'Completed'
         ride.save()
     return redirect('driver_dashboard')
+
+@login_required
+def ride_status_view(request, ride_id):
+    ride = get_object_or_404(RideRequest, id=ride_id, user=request.user)
+    return render(request, 'accounts/ride_status.html', {
+        'ride': ride
+    })
+def is_driver(user):
+    return hasattr(user, 'driver')
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            code = user.profile.verification_code
+            send_mail(
+                'SAAHride Verification Code',
+                f'Your code is: {code}',
+                'noreply@saahride.com',
+                [user.email],
+                fail_silently=False
+            )
+            return redirect('verify_code')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+
+def verify_code_view(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        profile = request.user.profile
+        if profile.verification_code == code:
+            profile.is_verified = True
+            profile.save()
+            return redirect('dashboard')
+    return render(request, 'registration/verify.html')

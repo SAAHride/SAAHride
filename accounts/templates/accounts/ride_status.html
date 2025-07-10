@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="padding: 20px;">
+  <h2>🚘 Ride Status</h2>
+  <p><strong>Pickup:</strong> {{ ride.pickup_location }}</p>
+  <p><strong>Destination:</strong> {{ ride.destination }}</p>
+  <p><strong>Ride Type:</strong> {{ ride.ride_type|default:"Standard" }}</p>
+  <p><strong>Status:</strong> <span id="ride-status">{{ ride.status }}</span></p>
+
+  <div id="driver-info">
+    {% if ride.accepted_by %}
+      <p><strong>Driver:</strong> {{ ride.accepted_by.username }}</p>
+      <p style="color: green;">🚗 Your driver is on the way!</p>
+    {% else %}
+      <p style="color: orange;">Looking for a driver...</p>
+    {% endif %}
+  </div>
+
+  <br>
+  <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+</div>
+
+<script>
+  let hasAlerted = false;
+
+  setInterval(() => {
+    fetch(window.location.href)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const newStatus = doc.getElementById("ride-status").innerText;
+        const newDriverInfo = doc.getElementById("driver-info").innerHTML;
+
+        document.getElementById("ride-status").innerText = newStatus;
+        document.getElementById("driver-info").innerHTML = newDriverInfo;
+
+        if (newStatus.toLowerCase() === "accepted" && !hasAlerted) {
+          alert("🎉 Your ride has been accepted!");
+          hasAlerted = true;
+        }
+      });
+  }, 5000);
+</script>
+{% endblock %}

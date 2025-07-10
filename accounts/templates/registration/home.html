@@ -74,22 +74,28 @@
 <body>
 
 <div class="container">
-    <!-- Optional Logo -->
-    <!-- <img src="{% static 'accounts/logo.png' %}" class="logo" alt="SAAHride Logo"> -->
-
     <h1>Welcome to SAAHride</h1>
     <p>Your trusted ride, anytime, anywhere.</p>
 
-    <div class="button-group">
-        <a href="{% url 'register' %}"><button>Register</button></a>
-        <a href="{% url 'login' %}"><button>Login</button></a>
-    </div>
+    {% if user.is_authenticated %}
+        {% if user.driver %}
+            <a href="{% url 'driver_dashboard' %}"><button>Driver Dashboard</button></a>
+        {% else %}
+            <a href="{% url 'request_ride' %}"><button>Book a Ride</button></a>
+        {% endif %}
+        <a href="{% url 'logout' %}"><button>Logout</button></a>
+    {% else %}
+        <div class="button-group">
+            <a href="{% url 'register' %}"><button>Register</button></a>
+            <a href="{% url 'login' %}"><button>Login</button></a>
+        </div>
 
-    <div class="driver-section">
-        <h3>🚘 I am a driver</h3>
-        <a href="{% url 'driver_register' %}"><button>Register as Driver</button></a>
-        <a href="{% url 'login' %}"><button>Login as Driver</button></a>
-    </div>
+        <div class="driver-section">
+            <h3>🚘 I am a driver</h3>
+            <a href="{% url 'driver_register' %}"><button>Register as Driver</button></a>
+            <a href="{% url 'login' %}"><button>Login as Driver</button></a>
+        </div>
+    {% endif %}
 </div>
 
 </body>

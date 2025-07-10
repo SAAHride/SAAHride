@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=15)
@@ -35,3 +36,14 @@ class RideRequest(models.Model):
 
     def _str_(self):
         return f"{self.user.username} - {self.pickup_location} to {self.destination}"
+
+
+# ✅ Add Profile for phone verification
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+
+    def _str_(self):
+        return self.user.username
