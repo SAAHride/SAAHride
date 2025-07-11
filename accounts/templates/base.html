@@ -35,17 +35,22 @@
 
         <!-- ✅ Conditional Navigation Buttons -->
         <div class="nav-buttons">
-            {% if user.is_authenticated %}
-                {% if user.driver %}
-                    <a href="{% url 'driver_dashboard' %}">Driver Dashboard</a>
-                {% else %}
-                    <a href="{% url 'request_ride' %}">Book a Ride</a>
-                {% endif %}
-                <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'register' %}">Register</a>
-                <a href="{% url 'login' %}">Login</a>
-            {% endif %}
+           {% if user.is_authenticated %}
+  <a href="{% url 'dashboard' %}">Dashboard</a>
+
+  {% if user.driver %}
+    <!-- Show this only to drivers -->
+    <a href="{% url 'driver_dashboard' %}">Driver Dashboard</a>
+  {% else %}
+    <!-- Show this only to normal users (riders) -->
+    <a href="{% url 'request_ride' %}">Request a Ride</a>
+  {% endif %}
+
+  <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+  <a href="{% url 'login' %}">Login</a>
+  <a href="{% url 'register' %}">Register</a>
+{% endif %}
         </div>
 
         {% block content %}

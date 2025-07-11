@@ -34,7 +34,7 @@ class RideRequest(models.Model):
         related_name='accepted_rides'
     )
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.user.username} - {self.pickup_location} to {self.destination}"
 
 
@@ -45,5 +45,9 @@ class Profile(models.Model):
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
 
-    def _str_(self):
+    def __str__(self):
         return self.user.username
+    
+    @staticmethod
+    def is_driver(user):
+        return hasattr(user, 'driver')

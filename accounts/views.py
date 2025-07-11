@@ -1,4 +1,5 @@
 # accounts/views.py
+from pyexpat.errors import messages
 from django.core.mail import send_mail
 from .models import Profile
 from django.shortcuts import render
@@ -146,15 +147,16 @@ def register_view(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
-
 def verify_code_view(request):
-    return render(request, 'accounts/verify_code.html')  # Make sure this template exists
     if request.method == 'POST':
         code = request.POST.get('code')
-        profile = request.user.profile
-        if profile.verification_code == code:
+        try:
+            profile = Profile.objects.get(user=request.user, verification_code=code)
             profile.is_verified = True
             profile.save()
+            messages.success(request, '✅ Your account has been verified!')
             return redirect('dashboard')
-    return render(request, 'registration/verify.html')
-    return render(request, 'accounts/verify_code.html')  # Make sure this template exists
+        except Profile.DoesNotExist:
+            messages.error(request, '❌ Invalid verification code.')
+            return redirect('verify_code')
+    return render(request, 'accounts/verify_code.html')
